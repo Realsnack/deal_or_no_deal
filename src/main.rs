@@ -1,7 +1,9 @@
 use std::io::Write;
 
-mod game_logic;
+use crate::case::Case;
+
 mod case;
+mod game_logic;
 
 const CLEAR_SCREEN: &str = "\x1B[2J";
 
@@ -16,9 +18,30 @@ fn main() {
     press_enter();
     clear_screen();
 
-    let case = get_user_input("Please choose a case number between 1 and 26:");
-    println!("You chose case {}!", case);
+    let game = game_logic::GameLogic::new();
+
+    let case = choose_case();
+}
+
+fn choose_case() -> Case {
+    let case: u8;
+    loop {
+        let input = get_user_input("Please choose a case number between 1 and 26:");
+        case = input.trim().parse().expect("Failed to parse input");
+
+        if (case < 1) || (case > 26) {
+            println!("Invalid case number!");
+            press_enter();
+        }
+        break;
+    }
+
+    println!("You chose case number {}!", case);
     press_enter();
+    return Case {
+        number: case,
+        value: 0,
+    };
 }
 
 fn get_user_input(prompt_text: &str) -> String {
