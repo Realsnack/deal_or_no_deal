@@ -1,5 +1,3 @@
-use crate::case::Case;
-
 mod case;
 mod game_logic;
 mod menu;
@@ -17,5 +15,6 @@ fn main() {
 
     let mut game = game_logic::GameLogic::new();
     game.choose_case();
+    game.start_game();
     
 }

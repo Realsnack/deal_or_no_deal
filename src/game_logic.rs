@@ -1,4 +1,5 @@
 use crate::{case::Case, menu};
+use rand::Rng;
 
 pub struct GameLogic {
     pub players_case: Case,
@@ -42,9 +43,11 @@ impl GameLogic {
         };
     }
     
-    pub fn start_game() {
+    pub fn start_game(&mut self) {
         // Generate values for all cases
         let mut case_value_vector = Self::generate_case_values();
+
+        println!("{:?}", case_value_vector);
     }
 
     fn generate_case_values() -> Vec<usize> {
@@ -56,7 +59,7 @@ impl GameLogic {
         ];
     
         for _ in 0..26 {
-            let index = rng.gen_range(0, values_left.len());
+            let index = rng.gen_range(0..values_left.len());
             values.push(values_left[index]);
             values_left.remove(index);
         }
