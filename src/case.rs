@@ -1,4 +1,4 @@
 pub struct Case {
-    pub number: u8,
+    pub number: usize,
     pub value: usize,
 }
