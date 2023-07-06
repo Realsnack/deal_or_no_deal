@@ -4,6 +4,7 @@ use std::collections::HashMap;
 
 pub struct GameLogic {
     players_case: usize,
+    playes_case_value: usize,
     available_cases: HashMap<usize, usize>,
     opened_cases: HashMap<usize, usize>,
     round: usize,
@@ -24,6 +25,8 @@ impl GameLogic {
             panic!("Available cases map is not 26!");
         }
 
+        let playes_case_value = available_cases.get(&players_case_number).unwrap().clone();
+
         // Then remove players case from available cases map
         available_cases.remove(&players_case_number);
 
@@ -34,6 +37,7 @@ impl GameLogic {
         // Then start game
         GameLogic {
             players_case: players_case_number,
+            playes_case_value,
             round: 0,
             available_cases,
             opened_cases: HashMap::new(),
