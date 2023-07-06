@@ -15,4 +15,6 @@ fn main() {
 
     let mut game = game_logic::GameLogic::new();
     game.start_game();
+
+    println!("Thanks for playing!");
 }
