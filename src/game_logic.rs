@@ -1,28 +1,42 @@
-use crate::{case::{Case, self}, menu};
+use crate::menu;
 use rand::Rng;
 use std::collections::HashMap;
 
 pub struct GameLogic {
-    pub players_case: Case,
-    pub available_cases: Vec<Case>,
-    available_cases_map: HashMap<usize, Case>,
-    pub opened_cases: Vec<Case>,
-    opened_cases_map: HashMap<usize, Case>,
-    pub round: u8,
+    players_case: usize,
+    available_cases: HashMap<usize, usize>,
+    opened_cases: HashMap<usize, usize>,
+    round: usize,
 }
 
 impl GameLogic {
     pub fn new() -> GameLogic {
+        // First get players case number
+        let players_case_number = Self::choose_case_number();
+        // Then generate case values and fill available cases map
+        let case_value_vector = Self::generate_case_values();
+        let mut available_cases: HashMap<usize, usize> = HashMap::new();
+        for i in 0..26 {
+            available_cases.insert(i + 1, case_value_vector[i]);
+        }
+
+        if available_cases.len() != 26 {
+            panic!("Available cases map is not 26!");
+        }
+
+        // Then remove players case from available cases map
+        available_cases.remove(&players_case_number);
+
+        if available_cases.len() != 25 {
+            panic!("Available cases map is not 25!");
+        }
+
+        // Then start game
         GameLogic {
-            players_case: Case {
-                number: 0,
-                value: 0,
-            },
-            available_cases: Vec::new(),
-            opened_cases: Vec::new(),
+            players_case: players_case_number,
             round: 0,
-            available_cases_map: HashMap::new(),
-            opened_cases_map: HashMap::new(),
+            available_cases,
+            opened_cases: HashMap::new(),
         }
     }
 
@@ -43,32 +57,6 @@ impl GameLogic {
         case_number
     }
 
-    pub fn start_game(&mut self) {
-        // Generate values for all cases
-        // self.choose_case();
-        let case_number = Self::choose_case_number();
-        
-        let case_value_vector = Self::generate_case_values();
-        self.players_case = Case {
-            number: case_number,
-            value: case_value_vector[case_number - 1],
-        };
-
-        #[cfg(debug_assertions)]
-        println!("Case value: {}", self.players_case.value);
-
-        for i in 0..26 {
-            let case = Case {
-                number: i + 1,
-                value: case_value_vector[i],
-            };
-            self.available_cases.push(case);
-        }
-
-        // Remove player case from available cases
-        self.available_cases.remove(self.players_case.number - 1);
-    }
-
     fn generate_case_values() -> Vec<usize> {
         let mut values: Vec<usize> = Vec::new();
         let mut rng = rand::thread_rng();
@@ -84,5 +72,9 @@ impl GameLogic {
         }
 
         values
+    }
+
+    pub fn start_game(&mut self) {
+        println!("Starting game...");
     }
 }
