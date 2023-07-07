@@ -8,11 +8,11 @@ fn main() {
     println!("Welcome to Deal or no deal!");
     let name = menu::get_user_input("Please enter your name:");
     println!("Hello, {}!", name);
-    println!("");
+    println!();
     menu::press_enter();
     menu::clear_screen();
 
-    let mut game = game_logic::GameLogic::new();
+    let mut game = game_logic::GameState::new();
     game.start_game();
 
     println!("Thanks for playing!");

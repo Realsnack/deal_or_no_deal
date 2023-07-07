@@ -2,7 +2,7 @@ use crate::menu;
 use rand::Rng;
 use std::collections::HashMap;
 
-pub struct GameLogic {
+pub struct GameState {
     players_case: usize,
     players_case_value: usize,
     available_cases: HashMap<usize, usize>,
@@ -10,22 +10,24 @@ pub struct GameLogic {
     round: usize,
 }
 
-impl GameLogic {
-    pub fn new() -> GameLogic {
+impl GameState {
+    pub fn new() -> GameState {
         // First get players case number
         let players_case_number = Self::choose_case_number();
         // Then generate case values and fill available cases map
-        let case_value_vector = Self::generate_case_values();
+        let case_values = Self::generate_case_values();
         let mut available_cases: HashMap<usize, usize> = HashMap::new();
         for i in 0..26 {
-            available_cases.insert(i + 1, case_value_vector[i]);
+            available_cases.insert(i + 1, case_values[i]);
         }
 
         if available_cases.len() != 26 {
             panic!("Available cases map is not 26!");
         }
 
-        let players_case_value = available_cases.get(&players_case_number).unwrap().clone();
+        let players_case_value = available_cases.get(&players_case_number)
+            .unwrap()
+            .clone();
 
         // Then remove players case from available cases map
         available_cases.remove(&players_case_number);
@@ -35,7 +37,7 @@ impl GameLogic {
         }
 
         // Then start game
-        GameLogic {
+        GameState {
             players_case: players_case_number,
             players_case_value,
             round: 0,
@@ -57,7 +59,7 @@ impl GameLogic {
             }
             break;
         }
-        
+
         case_number
     }
 
@@ -65,8 +67,8 @@ impl GameLogic {
         let mut values: Vec<usize> = Vec::new();
         let mut rng = rand::thread_rng();
         let mut values_left = vec![
-            0_01, 1, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1_000, 5_000, 10_000, 25_000,
-            50_000, 75_000, 100_000, 200_000, 300_000, 400_000, 500_000, 750_000, 1_000_000,
+            1, 10, 50, 100, 250, 500, 750, 1_000, 2_000, 3_000, 4_000, 5_000, 7_500, 10_000, 50_000, 100_000, 250_000,
+            500_000, 750_000, 1_000_000, 2_000_000, 3_000_000, 4_000_000, 5_000_000, 7_500_000, 10_000_000,
         ];
 
         for _ in 0..26 {
