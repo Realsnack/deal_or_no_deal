@@ -1,4 +1,3 @@
-mod case;
 mod game_logic;
 mod menu;
 
