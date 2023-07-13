@@ -12,8 +12,11 @@ fn main() {
     menu::press_enter();
     menu::clear_screen();
 
-    let mut game = game_logic::GameState::new();
-    game.start_game();
+    let game_state = game_logic::create_game();
+
+    println!("{:?}", game_state);
+
+    let game_state = game_logic::play_round(game_state, 1);
 
     println!("Thanks for playing!");
 }
