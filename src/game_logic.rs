@@ -30,7 +30,7 @@ pub fn create_game() -> GameState {
     GameState {
         players_case,
         players_case_value,
-        round: 0,
+        round: 1,
         available_cases,
         opened_cases: HashMap::new() 
     }
@@ -79,7 +79,7 @@ pub fn generate_case_values() -> Vec<usize> {
     values
 }
 
-pub fn play_round(game_state: GameState, round:usize) -> GameState {
+pub fn play_round(game_state: GameState) -> GameState {
     let round_map: HashMap<usize, usize> = HashMap::from([
         (1,6),
         (2,5),
@@ -96,13 +96,18 @@ pub fn play_round(game_state: GameState, round:usize) -> GameState {
     let mut cases_chosen = 0;
     let mut available_cases = game_state.available_cases;
     let mut opened_cases = game_state.opened_cases;
+    
+    // for i in 1..variaaa {
+    for i in 1usize..round_map.get(&game_state.round).unwrap().clone()+1 {
+        println!("Round {} case: {}", game_state.round, i);
+    }
 
     GameState {
         players_case: game_state.players_case,
         players_case_value: game_state.players_case_value,
         available_cases,
         opened_cases,
-        round: round+1,
+        round: 2
     }
 }
 

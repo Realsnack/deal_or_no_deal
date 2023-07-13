@@ -16,7 +16,7 @@ fn main() {
 
     println!("{:?}", game_state);
 
-    let game_state = game_logic::play_round(game_state, 1);
+    let game_state = game_logic::play_round(game_state);
 
     println!("Thanks for playing!");
 }
