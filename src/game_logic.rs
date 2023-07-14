@@ -15,9 +15,9 @@ pub struct GameState {
 pub fn create_game() -> GameState {
     let players_case = game_logic::choose_case_number();
     let case_values = generate_case_values();
-    
+
     let mut available_cases: HashMap<usize, usize> = HashMap::new();
-    
+
 
     for i in 0..26 {
         available_cases.insert(i+1, case_values[i]);
@@ -27,21 +27,25 @@ pub fn create_game() -> GameState {
         .unwrap()
         .clone();
 
+    available_cases.remove(&players_case);
+    let mut opened_cases: HashMap<usize, usize> = HashMap::new();
+    opened_cases.insert(players_case, players_case_value);
+
     GameState {
         players_case,
         players_case_value,
         round: 1,
         available_cases,
-        opened_cases: HashMap::new() 
+        opened_cases
     }
 }
 
 pub fn choose_case_number() -> usize {
-    let mut case_number: usize;
+    let case_number: usize;
     loop {
         let input = menu::get_user_input("Please choose a case number between 1 and 26:");
         let parsed_input = input.trim().parse::<usize>();  // usize is used as an example, use the appropriate type
-    
+
         match parsed_input {
             Ok(num) => {
                 if (num < 1) || (num > 26) {
@@ -81,25 +85,39 @@ pub fn generate_case_values() -> Vec<usize> {
 
 pub fn play_round(game_state: GameState) -> GameState {
     let round_map: HashMap<usize, usize> = HashMap::from([
-        (1,6),
-        (2,5),
-        (3,4),
-        (4,3),
-        (5,2),
-        (6,1),
-        (7,1),
-        (8,1),
-        (9,1),
-        (10,2)
+                                                         (1,6),
+                                                         (2,5),
+                                                         (3,4),
+                                                         (4,3),
+                                                         (5,2),
+                                                         (6,1),
+                                                         (7,1),
+                                                         (8,1),
+                                                         (9,1),
+                                                         (10,2)
     ]);
 
-    let mut cases_chosen = 0;
     let mut available_cases = game_state.available_cases;
     let mut opened_cases = game_state.opened_cases;
-    
+
     // for i in 1..variaaa {
     for i in 1usize..round_map.get(&game_state.round).unwrap().clone()+1 {
-        println!("Round {} case: {}", game_state.round, i);
+        let case_to_open = game_logic::choose_case_number();
+
+        if opened_cases.contains_key(&case_to_open) {
+            println!("That case has already been opened!");
+            menu::press_enter();
+            continue;
+        }
+
+        let case_value = available_cases.get(&case_to_open)
+            .unwrap()
+            .clone();
+
+        available_cases.remove(&case_to_open);
+        opened_cases.insert(case_to_open, case_value);
+
+        println!("Case numebr {} contains ${}", case_to_open, case_value);
     }
 
     GameState {
