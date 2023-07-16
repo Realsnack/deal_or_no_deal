@@ -102,6 +102,7 @@ pub fn play_round(game_state: GameState) -> GameState {
 
     // for i in 1..variaaa {
     for i in 1usize..round_map.get(&game_state.round).unwrap().clone()+1 {
+        println!();
         let case_to_open = game_logic::choose_case_number();
 
         if opened_cases.contains_key(&case_to_open) {
@@ -116,8 +117,8 @@ pub fn play_round(game_state: GameState) -> GameState {
 
         available_cases.remove(&case_to_open);
         opened_cases.insert(case_to_open, case_value);
-
-        println!("Case numebr {} contains ${}", case_to_open, case_value);
+        
+        println!("#{}: Case number {} contains ${}", i, case_to_open, case_value);
     }
 
     GameState {
