@@ -2,6 +2,7 @@ use crate::menu;
 use crate::game_logic;
 use rand::Rng;
 use std::collections::HashMap;
+use colorize::AnsiColor;
 
 #[derive(Debug)]
 pub struct GameState {
@@ -100,8 +101,7 @@ pub fn play_round(game_state: GameState) -> GameState {
     let mut available_cases = game_state.available_cases;
     let mut opened_cases = game_state.opened_cases;
 
-    // for i in 1..variaaa {
-    for i in 1usize..round_map.get(&game_state.round).unwrap().clone()+1 {
+    for _ in 1usize..round_map.get(&game_state.round).unwrap().clone()+1 {
         println!();
         let case_to_open = game_logic::choose_case_number();
 
@@ -117,8 +117,12 @@ pub fn play_round(game_state: GameState) -> GameState {
 
         available_cases.remove(&case_to_open);
         opened_cases.insert(case_to_open, case_value);
-        
-        println!("#{}: Case number {} contains ${}", i, case_to_open, case_value);
+
+        match case_value {
+            _ if case_value >= 250_000 => println!("You opened case {} which contained ${}!", case_to_open, case_value.to_string().red()),
+            _ if case_value < 250_000 => println!("You opened case {} which contained ${}!", case_to_open, case_value.to_string().green()),
+            _ => {}
+        };
     }
 
     GameState {

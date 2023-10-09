@@ -23,3 +23,4 @@ pub fn press_enter() {
 pub fn clear_screen() {
     println!("\x1B[2J");
 }
+
