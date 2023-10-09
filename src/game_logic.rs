@@ -134,3 +134,47 @@ pub fn play_round(game_state: GameState) -> GameState {
     }
 }
 
+pub fn make_offer(game_state: GameState) -> GameState {
+    let available_cases = game_state.available_cases;
+    let opened_cases = game_state.opened_cases;
+
+    let mut total_unopened_value = 0;
+    for (_, value) in available_cases.iter() {
+        total_unopened_value += value;
+    }
+
+    let offer = total_unopened_value / opened_cases.len();
+
+    println!("The banker is offering you ${} for your case.", offer.to_string().green());
+    println!();
+    println!("1. Accept offer");
+    println!("2. Decline offer");
+    println!();
+
+    let choice = menu::get_user_input("Please choose an option:");
+
+    match choice.trim() {
+        "1" => {
+            println!("Congratulations! You won ${}!", offer.to_string().green());
+            menu::press_enter();
+            std::process::exit(0);
+        },
+        "2" => {
+            println!("You declined the offer.");
+            menu::press_enter();
+        },
+        _ => {
+            println!("Invalid choice!");
+            menu::press_enter();
+        }
+    }
+
+    GameState {
+        players_case: game_state.players_case,
+        players_case_value: game_state.players_case_value,
+        available_cases,
+        opened_cases,
+        round: 3
+    }
+}
+

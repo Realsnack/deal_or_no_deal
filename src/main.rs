@@ -18,6 +18,12 @@ fn main() {
     
     let game_state = game_logic::play_round(game_state);
 
+    println!("{:?}", game_state);
+
+    menu::press_enter();
+
+    let game_state = game_logic::make_offer(game_state);
+
     println!("Thanks for playing!");
 }
 
